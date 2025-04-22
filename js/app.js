@@ -1,7 +1,7 @@
 // app.js - Main application file that ties everything together
 
 // Global variables
-const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxB21t92yFqdBOkQ4DfESpb1hDLQU6yLj_A9SP6QlZGE7oz7uWQ1lp9jSTropvrQvF_ig/exec';
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwDqBe2nyj_VsroUxrcsV-qZtH02y0yxlx8NNAdtpbDBIIkmuw_XDDuq5di9SZX_ZCVKw/exec';
 
 // Show toast notification
 function showToast(message, type = 'info') {
