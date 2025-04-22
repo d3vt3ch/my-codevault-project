@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeVault - Your Code, Backed Up and Beautifully Shared</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="lib/prism.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Auth Container (Login, Register, Forgot Password) -->
+        <div id="auth-container" class="container">
+            <div class="auth-wrapper">
+                <div class="logo-container">
+                    <h1><i class="fas fa-code"></i> CodeVault</h1>
+                    <p>Your Code, Backed Up and Beautifully Shared</p>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form">
+                    <h2>Login</h2>
+                    <form id="form-login">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" required>
+                            <span class="password-toggle" onclick="togglePassword('login-password')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div class="form-error" id="login-error"></div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <div class="auth-links">
+                        <a href="#" onclick="showAuthForm('register-form')">Create an account</a>
+                        <a href="#" onclick="showAuthForm('forgot-form')">Forgot password?</a>
+                    </div>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="register-form" class="auth-form hidden">
+                    <h2>Create Account</h2>
+                    <form id="form-register">
+                        <div class="form-group">
+                            <label for="register-name">Full Name</label>
+                            <input type="text" id="register-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <input type="password" id="register-password" required>
+                            <span class="password-toggle" onclick="togglePassword('register-password')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm-password">Confirm Password</label>
+                            <input type="password" id="register-confirm-password" required>
+                            <span class="password-toggle" onclick="togglePassword('register-confirm-password')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div class="form-error" id="register-error"></div>
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+                    </form>
+                    <div class="auth-links">
+                        <a href="#" onclick="showAuthForm('login-form')">Already have an account? Login</a>
+                    </div>
+                </div>
+                
+                <!-- Forgot Password Form -->
+                <div id="forgot-form" class="auth-form hidden">
+                    <h2>Reset Password</h2>
+                    <form id="form-forgot">
+                        <div class="form-group">
+                            <label for="forgot-email">Email</label>
+                            <input type="email" id="forgot-email" required>
+                        </div>
+                        <div class="form-error" id="forgot-error"></div>
+                        <div class="form-success" id="forgot-success"></div>
+                        <button type="submit" class="btn btn-primary">Reset Password</button>
+                    </form>
+                    <div class="auth-links">
+                        <a href="#" onclick="showAuthForm('login-form')">Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main App Container (Dashboard, Project Management) -->
+        <div id="app-container" class="container hidden">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="logo">
+                    <i class="fas fa-code"></i> CodeVault
+                </div>
+                <div class="user-menu">
+                    <span id="user-greeting">Hello, User</span>
+                    <button id="logout-btn" class="btn btn-outline">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Dashboard -->
+            <div id="dashboard" class="dashboard">
+                <div class="dashboard-header">
+                    <h2>My Projects</h2>
+                    <button id="new-project-btn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> New Project
+                    </button>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="my-projects">My Projects</button>
+                    <button class="tab-btn" data-tab="shared-projects">Shared Projects</button>
+                </div>
+                
+                <div id="my-projects" class="tab-content active">
+                    <div class="projects-grid" id="user-projects-grid">
+                        <!-- Projects will be loaded here dynamically -->
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open"></i>
+                            <p>You don't have any projects yet. Create your first project!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="shared-projects" class="tab-content">
+                    <div class="projects-grid" id="shared-projects-grid">
+                        <!-- Shared projects will be loaded here dynamically -->
+                        <div class="empty-state">
+                            <i class="fas fa-share-alt"></i>
+                            <p>No shared projects available.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project Form (Create/Edit) -->
+            <div id="project-form" class="project-form hidden">
+                <div class="form-header">
+                    <h2 id="project-form-title">Create New Project</h2>
+                    <button id="close-form-btn" class="btn btn-icon">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form id="form-project">
+                    <input type="hidden" id="project-id">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="project-name">Project Name</label>
+                            <input type="text" id="project-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="project-category">Category</label>
+                            <select id="project-category">
+                                <option value="Web Development">Web Development</option>
+                                <option value="Mobile App">Mobile App</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Game Development">Game Development</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="project-version">Version</label>
+                            <input type="text" id="project-version" placeholder="e.g., v1.0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="project-thumbnail">Thumbnail URL (optional)</label>
+                            <input type="url" id="project-thumbnail" placeholder="https://example.com/image.jpg">
+                        </div>
+                    </div>
+                    
+                    <div class="code-editors">
+                        <div class="form-group">
+                            <label for="frontend-code">Frontend Code</label>
+                            <textarea id="frontend-code" class="code-editor" placeholder="// Your frontend code here"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="backend-code">Backend Code</label>
+                            <textarea id="backend-code" class="code-editor" placeholder="// Your backend code here"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="project-url">Related URL(s)</label>
+                            <input type="url" id="project-url" placeholder="https://example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-remarks">Remarks</label>
+                        <textarea id="project-remarks" placeholder="Additional notes about your project"></textarea>
+                    </div>
+                    
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="project-private">
+                        <label for="project-private">Make Private</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="cancel-project-btn" class="btn btn-outline">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Project</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Code Viewer -->
+            <div id="code-viewer" class="code-viewer hidden">
+                <div class="viewer-header">
+                    <div class="viewer-info">
+                        <h2 id="viewer-title">Project Title</h2>
+                        <div class="viewer-meta">
+                            <span id="viewer-category">Category</span>
+                            <span id="viewer-version">v1.0</span>
+                            <span id="viewer-date">April 22, 2025</span>
+                        </div>
+                    </div>
+                    <button id="close-viewer-btn" class="btn btn-icon">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="viewer-content">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="frontend">Frontend</button>
+                        <button class="code-tab" data-tab="backend">Backend</button>
+                    </div>
+                    
+                    <div class="code-panels">
+                        <div id="frontend-panel" class="code-panel active">
+                            <pre><code class="language-html" id="viewer-frontend-code"></code></pre>
+                        </div>
+                        <div id="backend-panel" class="code-panel">
+                            <pre><code class="language-javascript" id="viewer-backend-code"></code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="viewer-footer">
+                    <div class="viewer-remarks">
+                        <h3>Remarks</h3>
+                        <p id="viewer-remarks"></p>
+                    </div>
+                    <div class="viewer-url">
+                        <h3>Related URL</h3>
+                        <a id="viewer-url" href="#" target="_blank"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+    
+    <!-- Scripts -->
+    <script src="lib/prism.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/project.js"></script>
+    <script src="js/viewer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
